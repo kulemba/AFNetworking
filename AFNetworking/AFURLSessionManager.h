@@ -319,6 +319,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable NSProgress *)downloadProgressForTask:(NSURLSessionDownloadTask *)downloadTask;
 
+/**
+ By default, the total expected bytes will return -1 for gzipped content, which breaks NSProgress reporting. By specifiying a cusomt header key, the total bytes can be read correctly.
+ */
+@property(nonatomic,strong) NSString *headerKeyForUncompressedDownloadSize;
+
 ///-----------------------------------------
 /// @name Setting Session Delegate Callbacks
 ///-----------------------------------------

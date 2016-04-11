@@ -239,6 +239,16 @@ didFinishDownloadingToURL:(NSURL *)location
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
+    if (totalBytesExpectedToWrite == NSURLSessionTransferSizeUnknown && self.manager.headerKeyForUncompressedDownloadSize) {
+        NSHTTPURLResponse *response = (NSHTTPURLResponse*)downloadTask.response;
+        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSString *uncompressedContentLength = [response.allHeaderFields valueForKey:self.manager.headerKeyForUncompressedDownloadSize];
+            if (uncompressedContentLength) {
+                totalBytesExpectedToWrite = [uncompressedContentLength longLongValue];
+            }
+        }
+    }
+    
     self.progress.totalUnitCount = totalBytesExpectedToWrite;
     self.progress.completedUnitCount = totalBytesWritten;
 }
@@ -247,6 +257,17 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
       downloadTask:(__unused NSURLSessionDownloadTask *)downloadTask
  didResumeAtOffset:(int64_t)fileOffset
 expectedTotalBytes:(int64_t)expectedTotalBytes {
+    
+    if (expectedTotalBytes == NSURLSessionTransferSizeUnknown && self.manager.headerKeyForUncompressedDownloadSize) {
+        NSHTTPURLResponse *response = (NSHTTPURLResponse*)downloadTask.response;
+        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSString *uncompressedContentLength = [response.allHeaderFields valueForKey:self.manager.headerKeyForUncompressedDownloadSize];
+            if (uncompressedContentLength) {
+                expectedTotalBytes = [uncompressedContentLength longLongValue];
+            }
+        }
+    }
+    
     self.progress.totalUnitCount = expectedTotalBytes;
     self.progress.completedUnitCount = fileOffset;
 }
