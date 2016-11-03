@@ -239,11 +239,12 @@ didFinishDownloadingToURL:(NSURL *)location
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    if (totalBytesExpectedToWrite == NSURLSessionTransferSizeUnknown && self.manager.headerKeyForUncompressedDownloadSize) {
+    if (self.manager.headerKeyForUncompressedDownloadSize) {
         NSHTTPURLResponse *response = (NSHTTPURLResponse*)downloadTask.response;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
             NSString *uncompressedContentLength = [response.allHeaderFields valueForKey:self.manager.headerKeyForUncompressedDownloadSize];
-            if (uncompressedContentLength) {
+            NSString *encoding = [response.allHeaderFields valueForKey:@"Content-Encoding"];
+            if (uncompressedContentLength && [encoding isEqualToString:@"gzip"]) {
                 totalBytesExpectedToWrite = [uncompressedContentLength longLongValue];
             }
         }
