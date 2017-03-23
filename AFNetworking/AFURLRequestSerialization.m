@@ -360,8 +360,9 @@ forHTTPHeaderField:(NSString *)field
     NSMutableURLRequest *mutableRequest = [[NSMutableURLRequest alloc] initWithURL:url];
     mutableRequest.HTTPMethod = method;
 
+    NSSet *observedChangedKeyPaths = self.mutableObservedChangedKeyPaths.copy;
     for (NSString *keyPath in AFHTTPRequestSerializerObservedKeyPaths()) {
-        if ([self.mutableObservedChangedKeyPaths containsObject:keyPath]) {
+        if ([observedChangedKeyPaths containsObject:keyPath]) {
             [mutableRequest setValue:[self valueForKeyPath:keyPath] forKey:keyPath];
         }
     }
