@@ -22,12 +22,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AFURLResponseSerialization.h"
-#import "AFURLRequestSerialization.h"
-#import "AFSecurityPolicy.h"
+#import <UlmonCoreLib/AFURLResponseSerialization.h>
+#import <UlmonCoreLib/AFURLRequestSerialization.h>
+#import <UlmonCoreLib/AFSecurityPolicy.h>
 
 #if !TARGET_OS_WATCH
-#import "AFNetworkReachabilityManager.h"
+#import <UlmonCoreLib/AFNetworkReachabilityManager.h>
 #endif
 
 #ifdef API_UNAVAILABLE
